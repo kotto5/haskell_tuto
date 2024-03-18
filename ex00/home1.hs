@@ -1,7 +1,7 @@
 toDigitsRev :: Integer -> [Integer]
 toDigitsRev x
  | x <= 0       = []
- | otherwise    = x `mod` 10 : toDigits(x `div` 10)
+ | otherwise    = x `mod` 10 : toDigitsRev(x `div` 10)
 
 toDigits    :: Integer -> [Integer]
 toDigits list = toReverse (toDigitsRev list)
@@ -20,3 +20,6 @@ sumDigits [] = 0
 sumDigits (x:xs)
  | x >= 10 = sumDigits (toDigits x ++ xs)
  | otherwise = x + sumDigits xs
+
+validate :: Integer -> Bool
+validate n = sumDigits (doubleEveryOther (toDigits n)) `mod` 10 == 0
