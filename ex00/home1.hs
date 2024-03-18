@@ -14,3 +14,9 @@ doubleEveryOther :: [Integer] -> [Integer]
 doubleEveryOther (x:xs)
  | length xs `mod` 2 == 1 = x * 2 : doubleEveryOther xs
  | otherwise = x : if length xs > 0 then doubleEveryOther xs else []
+
+sumDigits :: [Integer] -> Integer
+sumDigits [] = 0
+sumDigits (x:xs)
+ | x >= 10 = sumDigits (toDigits x ++ xs)
+ | otherwise = x + sumDigits xs
