@@ -33,8 +33,6 @@ data MessageTypeAndStrings = MessageTypeAndStrings1 MessageType [String]
 --     | s1 == "W" = MessageTypeAndStrings1 Warning (s2 : ls)
 --     | s1 == "I" = MessageTypeAndStrings1 Info (s2 : ls)
 
-
-
 stringsToLogMessage :: [String] -> LogMessage
 stringsToLogMessage (s1:s2:s3:ls)
     | s1 == "E" = LogMessage (Error (read s2)) (read s3) (unwords ls)
@@ -48,3 +46,43 @@ parseMessage s = stringsToLogMessage (words s)
 
 parse :: String -> [LogMessage]
 parse s = map parseMessage (lines s)
+
+isRightBigLog :: LogMessage -> LogMessage -> Bool
+isRightBigLog (LogMessage _ time1 _) (LogMessage _ time2 _) = time1 < time2
+isRightBigLog _ _ = False
+
+isRightBigNode :: MessageTree -> MessageTree -> Bool
+isRightBigNode (Node _ l1 _) (Node _ l2 _) = isRightBigLog l1 l2
+isRightBigNode _ _ = False
+
+-- isRightBig :: LogMessage -> MessageTree -> Bool
+-- isRightBig l1 (Node _ l2 _) = isRightBigLog l1 l2
+-- isRightBig _ _ = False
+
+-- 同じ値はどうするの?
+
+getLogOfTree :: MessageTree -> LogMessage
+getLogOfTree Leaf = Unknown "Error"
+getLogOfTree (Node _ l _) = l
+
+insert :: LogMessage -> MessageTree -> MessageTree
+insert (Unknown _) t = t
+insert input Leaf = Node Leaf input Leaf
+insert input (Node left top right)
+ | input `isRightBigLog` top    = if left == Leaf || getLogOfTree left `isRightBigLog` input
+                                then Node (Node left input Leaf) top right
+                                else Node (insert input left) top right
+ | otherwise                    = if right == Leaf || input `isRightBigLog` getLogOfTree right
+                                then Node left top (Node Leaf input right)
+                                else Node left top (insert input right)
+
+-- 挿入の条件
+-- top left right input の 4種類
+-- input < top && input > left -> Node (Node left input Leaf) top right
+-- input < top && left == Leaf -> Node (Node Leaf input Leaf) top right
+-- input > top && input < right -> Node left top (Node Leaf input right)
+-- input > top && right == Leaf -> Node left top (Node Leaf input Leaf)
+
+-- こうまとめられる
+-- input < top && (input > left || left == Leaf) -> Node (Node left input Leaf) top right
+-- input > top && (input < right || right == Leaf) -> Node left top (Node Leaf input right)
