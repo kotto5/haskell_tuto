@@ -1,6 +1,7 @@
 module Test where
 
 import LogAnalysis
+import Log
 
 -- testInsert :: Int -> LogMessage
 -- testInsert n = map insert testParse parse n error.log

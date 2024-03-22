@@ -51,15 +51,7 @@ isRightBigLog :: LogMessage -> LogMessage -> Bool
 isRightBigLog (LogMessage _ time1 _) (LogMessage _ time2 _) = time1 < time2
 isRightBigLog _ _ = False
 
-isRightBigNode :: MessageTree -> MessageTree -> Bool
-isRightBigNode (Node _ l1 _) (Node _ l2 _) = isRightBigLog l1 l2
-isRightBigNode _ _ = False
-
--- isRightBig :: LogMessage -> MessageTree -> Bool
--- isRightBig l1 (Node _ l2 _) = isRightBigLog l1 l2
--- isRightBig _ _ = False
-
--- 同じ値はどうするの?
+-- 同じ値はどうするの? -> 一定のルールで裁かれるので問題なし
 
 getLogOfTree :: MessageTree -> LogMessage
 getLogOfTree Leaf = Unknown "Error"
