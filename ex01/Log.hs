@@ -6,7 +6,7 @@ import Control.Applicative
 
 data MessageType = Info
                  | Warning
-                 | Error Int Int
+                 | Error Int
   deriving (Show, Eq)
 
 type TimeStamp = Int
