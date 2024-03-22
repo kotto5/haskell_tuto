@@ -78,3 +78,9 @@ insert input (Node left top right)
 -- こうまとめられる
 -- input < top && (input > left || left == Leaf) -> Node (Node left input Leaf) top right
 -- input > top && (input < right || right == Leaf) -> Node left top (Node Leaf input right)
+
+build :: [LogMessage] -> MessageTree
+build []       = Leaf
+build (msg:[]) = insert msg Leaf
+build (msg:ls) = insert msg (build ls)
+
