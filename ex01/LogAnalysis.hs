@@ -84,3 +84,12 @@ build []       = Leaf
 build (msg:[]) = insert msg Leaf
 build (msg:ls) = insert msg (build ls)
 
+inOrder :: MessageTree -> [LogMessage]
+inOrder Leaf = []
+inOrder (Node t1 msg t2) = inOrder t1 ++ [msg] ++ inOrder t2
+
+-- usage : inOrder (build tree)
+-- tree の取得は testParse (Integer) parse "error.log" でできます
+-- これで出た大量の出力を直接引数として渡すということです。
+-- testParse() がなぜか [LogMessage] を返すのではなく IO を返すことになっているのが原因
+-- 後のチャプターで学べそうなのでワクワク
