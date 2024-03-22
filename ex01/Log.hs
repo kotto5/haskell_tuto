@@ -11,6 +11,8 @@ data MessageType = Info
 
 type TimeStamp = Int
 
+data Person = Person String Int Int 
+
 data LogMessage = LogMessage MessageType TimeStamp String
                 | Unknown String
   deriving (Show, Eq)

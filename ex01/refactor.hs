@@ -43,3 +43,17 @@ build (msg:ls) = insert msg (build ls)
 inOrder :: MessageTree -> [LogMessage]
 inOrder Leaf = []
 inOrder (Node t1 msg t2) = inOrder t1 ++ [msg] ++ inOrder t2
+
+isLevelOver50 :: LogMessage -> Bool
+isLevelOver50 (LogMessage (Error n) _ _) = n >= 50
+isLevelOver50 _ = False
+
+filterOver50 :: [LogMessage] -> [LogMessage]
+filterOver50 msgs = filter isLevelOver50 msgs
+
+onlyMsg :: [LogMessage] -> [String]
+onlyMsg ((LogMessage _ _ msg):ls) = msg : onlyMsg ls
+onlyMsg _ = []
+
+whatWentWrong :: [LogMessage] -> [String]
+whatWentWrong msgs = onlyMsg (filter isLevelOver50 msgs)
