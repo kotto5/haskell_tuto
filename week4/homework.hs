@@ -6,8 +6,7 @@ fun1 (x:xs)
     | otherwise = fun1 xs
 
 fun1' :: [Integer] -> Integer
-fun1' [] = 1
-fun1' xs = foldl' (*) 1 (map (\x -> x - 2) (filter even xs))
+fun1' = foldl' (*) 1 . map (\x -> x - 2) . filter even 
 
 fun2 :: Integer -> Integer
 fun2 1 = 0
