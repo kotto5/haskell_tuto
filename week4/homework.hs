@@ -94,3 +94,9 @@ xor = even . length . filter id
 
 xor' :: [Bool] -> Bool
 xor' = foldl (\b1 b2 -> (not b1 && b2) || (b1 && not b2)) False
+
+xor'' :: [Bool] -> Bool
+xor'' = foldl (/=) False
+
+map' :: (a -> b) -> [a] -> [b]
+map' f = foldr ((:) . f) []
