@@ -88,3 +88,9 @@ insert x (Node h left n right)
 
 foldTree' :: [a] -> Tree a
 foldTree' = foldr insert Leaf
+
+xor :: [Bool] -> Bool
+xor = even . length . filter id
+
+xor' :: [Bool] -> Bool
+xor' = foldl (\b1 b2 -> (not b1 && b2) || (b1 && not b2)) False
