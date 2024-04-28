@@ -79,12 +79,19 @@ insert x Leaf = Node 0 Leaf x Leaf
 insert x (Node h left n right)
     | lHeight < rHeight = Node h (insert x left) n right
     | lHeight > rHeight = Node h left n (insert x right)
-    | otherwise = Node (lHeight' + 1) left' n right
+    | otherwise = Node (lHeight + 2) left' n right
+    -- | otherwise = Node (lHeight' + 1) left' n right
     where
         lHeight = height' left
         rHeight = height' right
         lHeight' = height' left'
         left' = insert x left
+
+-- lHeight' が必要な理由は、取りたい高さが異なるから
+-- lHeight とは 左の挿入前のtree の height
+-- lHeight とは 左の挿入後のtree の height 
+-- 本当は lHeight + 2 とかでもいいのかもしれない
+
 
 foldTree' :: [a] -> Tree a
 foldTree' = foldr insert Leaf
@@ -100,3 +107,20 @@ xor'' = foldl (/=) False
 
 map' :: (a -> b) -> [a] -> [b]
 map' f = foldr ((:) . f) []
+
+-- 関数合成 (.) は、後に合成されたものが先に適用される
+-- 今回の場合 (:) . f == (:)( (f a) List )
+-- ということになる。
+-- String を atoi して その値を二倍するとかだと
+-- fun str = double . atoi str
+
+myFoldl :: (a -> b -> a) -> a -> [b] -> a
+myFoldl = foldr . flip
+
+-- sieveSundaram :: Integer -> [Integer]
+-- sieveSundaram n = (\x -> 2*x 1) <$> [1..n] (\\) crossOut
+--     where crossOut = [x | i <- [1..n], j <- [i..n], let x = i + j + 2*i*j, x <= n]
+
+sieveSundaram :: Integer -> [Integer]
+sieveSundaram n = (\x -> 2*x + 1) <$> [1..n] (\\) crossOut
+  where crossOut = [x | i <- [1..n], j <- [i..n], let x = i + j + 2*i*j, x <= n]
