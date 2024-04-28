@@ -56,14 +56,35 @@ data Tree a = Leaf
 
 -- [each i lst | i <- [1..length lst]]
 
-toBiTree :: [a] -> Integer -> Tree a
-toBiTree [] _ = Leaf
-toBiTree (x:xs) height = Node height (toBiTree head (height + 1)) x (toBiTree tail (height + 1))
+height :: Tree a -> Integer
+height Leaf = -1
+height (Node h _ _ _) = h
+                
+foldTree :: [a] -> Tree a
+foldTree [] = Leaf
+foldTree (x:xs) = Node (max (height left) (height right) + 1) left x right
     where
         half_len = length xs `div` 2
         head = take half_len xs
         tail = drop half_len xs
-        
+        left = foldTree head
+        right = foldTree tail
 
-foldTree :: [a] -> Tree a
-foldTree xs = toBiTree xs 0
+height' :: Tree a -> Integer
+height' Leaf = -1
+height' (Node h _ _ _) = h
+
+insert :: a -> Tree a -> Tree a
+insert x Leaf = Node 0 Leaf x Leaf
+insert x (Node h left n right)
+    | lHeight < rHeight = Node h (insert x left) n right
+    | lHeight > rHeight = Node h left n (insert x right)
+    | otherwise = Node (lHeight' + 1) left' n right
+    where
+        lHeight = height' left
+        rHeight = height' right
+        lHeight' = height' left'
+        left' = insert x left
+
+foldTree' :: [a] -> Tree a
+foldTree' = foldr insert Leaf
