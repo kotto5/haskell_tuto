@@ -5,6 +5,7 @@ import Parser
 
 eval :: ExprT -> Integer
 eval (Add a b) = eval a + eval b
+eval (Mul a (Add b c)) = eval a * eval b + eval c -- 掛け算を優先する
 eval (Mul a b) = eval a * eval b
 eval (Lit a) = a
 
