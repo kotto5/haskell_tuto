@@ -16,3 +16,10 @@ evalStr exp =
         (Just a) -> Just (eval a)
         Nothing -> Nothing
     where result = parseExp Lit Add Mul exp
+
+-- ex3
+
+class Expr a where
+    lit :: Integer -> a
+    add :: a -> a -> a
+    mul :: a -> a -> a
